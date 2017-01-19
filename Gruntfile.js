@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     concat: {
       js: {
-        src: ['./views/*.js', './test/*.js'],
+        src: 'src/**/*.js',
         dest: 'dest/js/concat.js'
       },
     },
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
+  grunt.registerTask('deploy', ['concat'
     // add your deploy tasks here
     // instead of saying git add/ git commit git push 
     // just call this function
