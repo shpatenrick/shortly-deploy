@@ -3,6 +3,10 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      js: {
+        src: ['./views/*.js', './test/*.js'],
+        dest: 'dest/js/concat.js'
+      },
     },
 
     mochaTest: {
@@ -89,7 +93,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+    // instead of saying git add/ git commit git push 
+    // just call this function
   ]);
+
+  grunt.registerTask('default', ['nodemon']);
 
 
 };
