@@ -36,6 +36,6 @@ app.get('/signup', handler.signupUserForm);
 app.post('/signup', handler.signupUser);
 
 app.get('/*', handler.navToLink);
-console.log('hi');
+// console.log('hi');
 
 module.exports = app;
