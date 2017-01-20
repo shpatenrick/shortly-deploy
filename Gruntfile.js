@@ -4,9 +4,13 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     concat: {
       js: {
-        src: 'src/**/*.js',
-        dest: 'dest/js/concat.js'
+        src: ['public/**/*.js'],
+        dest: 'concatFile/concat.js'
       },
+      css: {
+        src: ['public/**/*.css'],
+        dest: 'concatFile/concat.css'
+      }
     },
 
     mochaTest: {
@@ -25,15 +29,30 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      target: {
+        files: {
+          'public/dist/output.min.js': ['concatFile/concat.js']
+        }
+      }
+    },
+
+    cssmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'concatFile/',
+          src: ['concat.css'],
+          dest: 'public/dist/',
+          ext: '.min.css'
+        }]
+      }
     },
 
     eslint: {
       target: [
         // Add list of files to lint here
+        'public/client/*.js'
       ]
-    },
-
-    cssmin: {
     },
 
     watch: {
@@ -54,8 +73,16 @@ module.exports = function(grunt) {
     },
 
     shell: {
-      prodServer: {
+      multiple: {
+        command: [
+          'git add .',
+          'git commit',
+          'git push live master'
+        ].join('&&')
       }
+      // commit: {
+      //   command: ['git commit']
+      // }
     },
   });
 
@@ -80,7 +107,7 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build', ['mochaTest', 'concat', 'uglify', 'cssmin', 'eslint'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -91,13 +118,21 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', ['concat'
+  // grunt.registerTask('concat', ['concat']);
+
+  grunt.registerTask('deploy', function() {
+    if (grunt.option('prod')) {
+      //do stuff
+      grunt.task.run(['build']);
+    } else {
+      grunt.task.run(['build']);
+    }
     // add your deploy tasks here
     // instead of saying git add/ git commit git push 
     // just call this function
-  ]);
+  });
 
-  grunt.registerTask('default', ['nodemon']);
+  // grunt.registerTask('default', []);
 
 
 };
